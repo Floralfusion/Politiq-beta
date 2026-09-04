@@ -18,7 +18,8 @@ export function PricingPage() {
   const { user } = useAuth();
   const [payOpen, setPayOpen] = useState(false);
 
-  const isSubscribed = subscriptions.some((s) => s.profileId === user.id && s.status === "ACTIVE");
+  // SAFE CHECK: If there is no user signed in, they cannot be subscribed.
+  const isSubscribed = !!user && !!user.id && subscriptions.some((s) => s.profileId === user.id && s.status === "ACTIVE");
 
   return (
     <div className="container-page py-12 sm:py-16">
