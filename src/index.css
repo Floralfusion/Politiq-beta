@@ -1,0 +1,38 @@
+@import url("https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+@layer base {
+  html {
+    @apply antialiased;
+  }
+  body {
+    @apply bg-ink-50 text-ink-900 font-sans;
+    -webkit-tap-highlight-color: transparent;
+  }
+  h1, h2, h3, h4 {
+    @apply font-serif text-navy-800;
+  }
+  ::selection {
+    @apply bg-navy-700/15;
+  }
+  :focus-visible {
+    @apply outline-none ring-2 ring-navy-600 ring-offset-2 ring-offset-white rounded-sm;
+  }
+  html, body, #root {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .container-page { @apply mx-auto w-full max-w-content px-4 sm:px-6 lg:px-8; }
+}
