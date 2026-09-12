@@ -1,6 +1,3 @@
-# Works around an npm arborist crash ("Cannot read properties of null (reading 'edgesOut')")
-# triggered by peer-dependency resolution between next@15/16 and vitest's optional peer deps
-# on npm 10.9.x. Safe here because there's no actual conflicting version requirement — this is
-# a resolver bug, not a real incompatibility. Ensures `npm install` works the same way locally
-# and on Vercel without needing to remember a CLI flag.
-legacy-peer-deps=true
+{
+  "framework": "nextjs"
+}
