@@ -38,6 +38,13 @@ export function useAuth() {
   const onboardingComplete = useDemoStore((s) => s.onboardingComplete);
 
   const isSignedIn = CLERK_ENABLED ? !!clerkUser?.isSignedIn : demoSignedIn;
+  // Demo mode has no async loading step, so it's always "loaded" immediately. Live mode must
+  // wait for Clerk to actually finish checking the session before treating "not signed in yet"
+  // as "definitely signed out" — without this, route guards fire during Clerk's brief initial
+  // loading window, incorrectly bounce a genuinely-signed-in user to /login, and Clerk's own
+  // <SignIn> then sees an active session and redirects back — producing exactly the
+  // login/onboarding ping-pong loop this fixes.
+  const isLoaded = CLERK_ENABLED ? !!clerkUser?.isLoaded : true;
 
   const signOut = useCallback(() => {
     if (CLERK_ENABLED && clerk) {
@@ -55,6 +62,7 @@ export function useAuth() {
   return useMemo(
     () => ({
       isSignedIn,
+      isLoaded,
       isDemo: DEMO_MODE,
       onboardingComplete,
       // NOTE: still returns the fixed demo profile even for real, live-signed-in Clerk users —
@@ -67,6 +75,6 @@ export function useAuth() {
       signIn,
       signOut,
     }),
-    [isSignedIn, onboardingComplete, signIn, signOut]
+    [isSignedIn, isLoaded, onboardingComplete, signIn, signOut]
   );
 }
