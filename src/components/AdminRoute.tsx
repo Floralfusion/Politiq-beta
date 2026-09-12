@@ -10,7 +10,18 @@ import { useAuth } from "@/hooks/useAuth";
  * See docs/security.md and docs/admin.md.
  */
 export function AdminRoute({ children }: { children: ReactNode }) {
-  const { isSignedIn, isDemo } = useAuth();
+  const { isSignedIn, isDemo, isLoaded } = useAuth();
+
+  // Same reasoning as ProtectedRoute: don't decide anything until Clerk has actually finished
+  // loading the session, or a genuine admin gets bounced during the brief loading window.
+  if (!isLoaded) {
+    return (
+      <div className="flex min-h-screen items-center justify-center text-sm text-ink-400">
+        Loading…
+      </div>
+    );
+  }
+
   // In demo mode, any signed-in demo user may preview the admin console for evaluation purposes.
   // In live mode, wire this to a verified admin_users lookup (see services/adminService.ts).
   if (!isSignedIn && !isDemo) return <Navigate to="/login" replace />;
